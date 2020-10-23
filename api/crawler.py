@@ -49,30 +49,28 @@ class Crawler:
 
         # get the soup
         soup = BeautifulSoup(requests.get(site + str(page)).text, 'html.parser')
-        
-        # storage for all memes found
-        links = []
 
         # get all of the links containers
         containers = soup.find("div", id="gif_container").find_all("a")
 
-        for i in containers:
-            raw = {}
+        # select one from the containers
+        raw = random.choice(containers)
 
-            # get the title
-            raw['title'] = i.find("div", class_="gif_title_gl").get_text()
+        # initialize meme dict
+        meme = {}
 
-            # get the gif src
-            soup_rc = BeautifulSoup(requests.get(i["href"]).text, 'html.parser')
-            
-            # extact the src from the video tag
-            raw['src'] = soup_rc.find("div", id="gif_div").find("source")["src"]
+        # get the gif src
+        soup_rc = BeautifulSoup(requests.get(raw["href"]).text, 'html.parser')
 
-            # append the raw
-            links.append(raw)
+        # get the title
+        meme['title'] = soup_rc.find("div", id="name_of_gif").get_text()
+        
+        # extact the src from the video tag
+        meme['src'] = soup_rc.find("div", id="gif_div").find("source")["src"]
+
 
         # return the links
-        return random.choice(links)
+        return meme
 
     # MemeDroid website
     @staticmethod

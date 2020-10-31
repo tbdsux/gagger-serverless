@@ -25,6 +25,9 @@ class Crawler:
         elif site == "imgflip":
             meme["website"] = "imgflip.com"
             meme["meme"] = Crawler.imgFlip()
+        elif site == "gifbin":
+            meme["website"] = "gifbin.com"
+            meme["meme"] = Crawler.gifBin()
 
         # return the meme
         return meme
@@ -44,6 +47,9 @@ class Crawler:
         elif website == "imgflip":
             meme["website"] = "imgflip.com"
             meme["meme"] = Crawler.imgFlip()
+        elif website == "gifbin":
+            meme["website"] = "gifbin.com"
+            meme["meme"] = Crawler.gifBin()
 
         return meme
 
@@ -116,9 +122,9 @@ class Crawler:
     @staticmethod
     def imgFlip():
         site = "https://imgflip.com/?sort=latest"
-        
+
         # get the soup
-        soup = BeautifulSoup(requests.get(site).text, 'html.parser')
+        soup = BeautifulSoup(requests.get(site).text, "html.parser")
 
         # get all containers
         containers = soup.find_all("div", class_="base-unit")
@@ -128,7 +134,34 @@ class Crawler:
 
         # compile
         meme = {}
-        meme["title"] = con.find("h2", class_="base-unit-title").get_text() # get the title
-        meme["src"] = "https:" + con.find("img")["src"] # get the img src
+        meme["title"] = con.find(
+            "h2", class_="base-unit-title"
+        ).get_text()  # get the title
+        meme["src"] = "https:" + con.find("img")["src"]  # get the img src
+
+        return meme
+
+    # gifBin website (gifs)
+    @staticmethod
+    def gifBin():
+        site = "https://www.gifbin.com/random"
+
+        # get the soup
+        soup = BeautifulSoup(requests.get(site).text, "html.parser")
+
+        # get the container
+        container = soup.find("div", id="main-box")
+
+        # get the raw vid
+        vids_srcs = [
+            i["src"]
+            for i in container.find("video").find_all("source")
+            if i["src"].endswith(".mp4")
+        ]
+
+        # compile
+        meme = {}
+        meme["title"] = container.find("h1").get_text()
+        meme["src"] = vids_srcs[0]
 
         return meme

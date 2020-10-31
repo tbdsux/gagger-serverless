@@ -18,5 +18,5 @@ async def spec(website: str):
 @app.get('/about')
 async def about():
     return {
-        "about": "just a simple web api"
+        "about": "just a simple meme scraper api"
     }

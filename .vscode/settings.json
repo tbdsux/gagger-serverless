@@ -1,5 +1,0 @@
-{
-    "editor.defaultFormatter": "ms-python.python",
-    "python.pythonPath": "/home/theboringdude/Desktop/zeta/venv/bin/python3.7",
-    "python.formatting.blackPath": "/home/theboringdude/Desktop/zeta/venv/bin/black"
-}
